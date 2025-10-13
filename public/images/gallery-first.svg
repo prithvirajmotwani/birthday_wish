@@ -1,0 +1,20 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">First Picture Together</title>
+  <desc id="desc">Abstract illustration of a couple silhouetted against a warm gradient sky.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#014034" />
+      <stop offset="100%" stop-color="#ff6f91" stop-opacity="0.7" />
+    </linearGradient>
+    <linearGradient id="sun" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f5e6cc"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)" rx="48"/>
+  <circle cx="400" cy="160" r="120" fill="url(#sun)" opacity="0.85"/>
+  <path d="M240 450 Q320 370 400 430 Q480 370 560 450 L560 520 L240 520Z" fill="#001f1a" opacity="0.4"/>
+  <path d="M320 420 Q360 360 400 420 Q440 360 480 420 Q440 480 400 460 Q360 480 320 420Z" fill="#fff" opacity="0.9"/>
+  <path d="M340 410 Q370 380 400 410 Q430 380 460 410 Q430 450 400 440 Q370 450 340 410Z" fill="#ff6f91" opacity="0.7"/>
+  <text x="400" y="560" font-family="'Great Vibes', cursive" font-size="48" fill="#f5e6cc" text-anchor="middle">Our first spark</text>
+</svg>

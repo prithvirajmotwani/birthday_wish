@@ -1,0 +1,37 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ice Cream Date</title>
+  <desc id="desc">Whimsical illustration of ice cream cones with hearts.</desc>
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#013026" />
+      <stop offset="100%" stop-color="#014034" />
+    </linearGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b8860b" />
+      <stop offset="100%" stop-color="#f5e6cc" />
+    </linearGradient>
+    <linearGradient id="scoopOne" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff6f91" />
+      <stop offset="100%" stop-color="#f5e6cc" />
+    </linearGradient>
+    <linearGradient id="scoopTwo" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5e6cc" />
+      <stop offset="100%" stop-color="#ff6f91" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" rx="48" fill="url(#bg2)" />
+  <g transform="translate(190 140)">
+    <polygon points="120,200 90,440 150,440" fill="url(#cone)" opacity="0.85" />
+    <circle cx="120" cy="180" r="70" fill="url(#scoopOne)" />
+    <circle cx="120" cy="110" r="50" fill="#f5e6cc" opacity="0.8" />
+    <path d="M80 70 Q120 10 160 70 Q120 120 80 70Z" fill="#ff6f91" opacity="0.7" />
+  </g>
+  <g transform="translate(420 140)">
+    <polygon points="120,200 90,440 150,440" fill="url(#cone)" opacity="0.85" />
+    <circle cx="120" cy="180" r="70" fill="url(#scoopTwo)" />
+    <circle cx="120" cy="110" r="50" fill="#f5e6cc" opacity="0.8" />
+    <path d="M80 70 Q120 10 160 70 Q120 120 80 70Z" fill="#ff6f91" opacity="0.7" />
+  </g>
+  <path d="M90 520 C160 480 640 480 710 520" stroke="#f5e6cc" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+  <text x="400" y="560" font-family="'Dancing Script', cursive" font-size="48" fill="#f5e6cc" text-anchor="middle">Sugar + giggles</text>
+</svg>

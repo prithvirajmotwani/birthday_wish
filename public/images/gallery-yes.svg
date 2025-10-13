@@ -1,0 +1,27 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">When You Said Yes</title>
+  <desc id="desc">Stylized engagement moment with sparkling ring.</desc>
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#f5e6cc" stop-opacity="0.45" />
+      <stop offset="90%" stop-color="#014034" />
+    </radialGradient>
+    <radialGradient id="ring" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff2d8" />
+      <stop offset="100%" stop-color="#b8860b" />
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" rx="48" fill="url(#bg3)" />
+  <g transform="translate(300 180)">
+    <ellipse cx="100" cy="220" rx="120" ry="50" fill="#001f1a" opacity="0.45" />
+    <circle cx="100" cy="140" r="90" fill="none" stroke="#f5e6cc" stroke-width="14" stroke-dasharray="12 12" opacity="0.45" />
+    <circle cx="100" cy="180" r="68" fill="none" stroke="#b8860b" stroke-width="10" />
+    <circle cx="100" cy="180" r="54" fill="url(#ring)" />
+    <polygon points="80,90 120,90 150,130 100,180 50,130" fill="#ff6f91" opacity="0.85" />
+    <circle cx="100" cy="68" r="36" fill="#fff" opacity="0.9" />
+    <g fill="#f5e6cc" opacity="0.75">
+      <path d="M100 28 L108 46 L128 46 L112 58 L120 76 L100 64 L80 76 L88 58 L72 46 L92 46Z" />
+    </g>
+  </g>
+  <text x="400" y="540" text-anchor="middle" font-size="48" font-family="'Great Vibes', cursive" fill="#f5e6cc">Forever started here</text>
+</svg>
