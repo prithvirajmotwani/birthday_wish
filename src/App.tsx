@@ -24,70 +24,70 @@ const App = () => {
 
   const targetDate = useMemo(() => {
   const now = new Date()
-  // const targetMonth = 9 // October (zero-indexed)
-  // const targetDay = 16
+  const targetMonth = 9 // October (zero-indexed)
+  const targetDay = 16
 
   // Previous countdown presets retained for reference:
   // const twentyFourHours = 24 * 60 * 60 * 1000
   // return new Date(now.getTime() + twentyFourHours)
 
-    const eighteenSeconds = 4   * 1000
-    return new Date(now.getTime() + eighteenSeconds)
+    // const eighteenSeconds = 4   * 1000
+    // return new Date(now.getTime() + eighteenSeconds)
 
-    // const parseOffsetMinutes = (label?: string | null) => {
-    //   if (!label) return null
-    //   const explicitMatch = label.match(/([+-]\d{1,2})(?::(\d{2}))?/)
-    //   if (explicitMatch) {
-    //     const sign = explicitMatch[1].startsWith('-') ? -1 : 1
-    //     const hours = Math.abs(parseInt(explicitMatch[1], 10))
-    //     const minutes = explicitMatch[2] ? parseInt(explicitMatch[2], 10) : 0
-    //     return sign * (hours * 60 + minutes)
-    //   }
+    const parseOffsetMinutes = (label?: string | null) => {
+      if (!label) return null
+      const explicitMatch = label.match(/([+-]\d{1,2})(?::(\d{2}))?/)
+      if (explicitMatch) {
+        const sign = explicitMatch[1].startsWith('-') ? -1 : 1
+        const hours = Math.abs(parseInt(explicitMatch[1], 10))
+        const minutes = explicitMatch[2] ? parseInt(explicitMatch[2], 10) : 0
+        return sign * (hours * 60 + minutes)
+      }
 
-    //   const normalized = label.toUpperCase()
-    //   if (normalized === 'BST') return 60
-    //   if (normalized === 'GMT' || normalized === 'UTC') return 0
+      const normalized = label.toUpperCase()
+      if (normalized === 'BST') return 60
+      if (normalized === 'GMT' || normalized === 'UTC') return 0
 
-    //   return null
-    // }
+      return null
+    }
 
-    // const getLondonOffsetMinutes = (year: number) => {
-    //   const baseUtc = new Date(Date.UTC(year, targetMonth, targetDay, 0, 0, 0))
-    //   const formatterOptions = ['shortOffset', 'longOffset', 'short', 'long'] as const
+    const getLondonOffsetMinutes = (year: number) => {
+      const baseUtc = new Date(Date.UTC(year, targetMonth, targetDay, 0, 0, 0))
+      const formatterOptions = ['shortOffset', 'longOffset', 'short', 'long'] as const
 
-    //   for (const option of formatterOptions) {
-    //     try {
-    //       const formatter = new Intl.DateTimeFormat('en-US', {
-    //         timeZone: 'Europe/London',
-    //         timeZoneName: option,
-    //       })
-    //       const label = formatter.formatToParts(baseUtc).find((part) => part.type === 'timeZoneName')?.value
-    //       const offsetMinutes = parseOffsetMinutes(label)
-    //       if (offsetMinutes !== null) {
-    //         return offsetMinutes
-    //       }
-    //     } catch {
-    //       // Some environments might not support every timeZoneName option; try the next one.
-    //       continue
-    //     }
-    //   }
+      for (const option of formatterOptions) {
+        try {
+          const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Europe/London',
+            timeZoneName: option,
+          })
+          const label = formatter.formatToParts(baseUtc).find((part) => part.type === 'timeZoneName')?.value
+          const offsetMinutes = parseOffsetMinutes(label)
+          if (offsetMinutes !== null) {
+            return offsetMinutes
+          }
+        } catch {
+          // Some environments might not support every timeZoneName option; try the next one.
+          continue
+        }
+      }
 
-    //   // Fallback: London is either GMT or GMT+1 depending on daylight savings. Mid-October falls under BST (GMT+1).
-    //   return 60
-    // }
+      // Fallback: London is either GMT or GMT+1 depending on daylight savings. Mid-October falls under BST (GMT+1).
+      return 60
+    }
 
-    // const createTarget = (year: number) => {
-    //   const londonOffsetMinutes = getLondonOffsetMinutes(year)
-    //   const utcMillis = Date.UTC(year, targetMonth, targetDay, 0, 0, 0) - londonOffsetMinutes * 60 * 1000
-    //   return new Date(utcMillis)
-    // }
+    const createTarget = (year: number) => {
+      const londonOffsetMinutes = getLondonOffsetMinutes(year)
+      const utcMillis = Date.UTC(year, targetMonth, targetDay, 0, 0, 0) - londonOffsetMinutes * 60 * 1000
+      return new Date(utcMillis)
+    }
 
-    // const currentYear = now.getFullYear()
-    // const candidateForThisYear = createTarget(currentYear)
+    const currentYear = now.getFullYear()
+    const candidateForThisYear = createTarget(currentYear)
 
-    // return candidateForThisYear.getTime() >= now.getTime()
-    //   ? candidateForThisYear
-    //   : createTarget(currentYear + 1)
+    return candidateForThisYear.getTime() >= now.getTime()
+      ? candidateForThisYear
+      : createTarget(currentYear + 1)
   }, [])
 
   useEffect(() => {
