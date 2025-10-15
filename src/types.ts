@@ -3,7 +3,5 @@ export type Stage =
   | 'wish'
   | 'letters'
   | 'gallery'
-  | 'carousel'
-  | 'future'
-  | 'game'
+  | 'video'
   | 'final'

@@ -7,9 +7,7 @@ const stageLabels: Record<NavigableStage, string> = {
   wish: 'Wish',
   letters: 'Love Notes',
   gallery: 'Memories',
-  carousel: 'Reasons',
-  future: 'Future',
-  game: 'Game',
+  video: 'Video',
   final: 'Forever',
 }
 

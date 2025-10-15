@@ -47,7 +47,7 @@ export const PhotoGallery = () => {
       >
         {galleryMoments.map((moment, index) => (
           <motion.button
-            key={moment.title}
+            key={moment.src}
             className="group relative overflow-hidden rounded-[2rem] border border-emerald-700/40 bg-emerald-950/40 p-1 text-left shadow-aurora backdrop-blur"
             variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
             whileHover={{ scale: 1.02 }}
@@ -57,19 +57,16 @@ export const PhotoGallery = () => {
             <div className="relative overflow-hidden rounded-[1.8rem]">
               <img
                 src={moment.src}
-                alt={moment.title}
+                alt={moment.caption}
                 loading="lazy"
                 className="h-56 w-full object-cover transition duration-700 group-hover:scale-105 md:h-64"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 text-cream">
-                <div className="flex items-center gap-2 text-rose">
-                  <FaHeart className="text-sm" />
-                  <span className="text-sm uppercase tracking-[0.35em] text-gold/80">
-                    {moment.title}
-                  </span>
+                <div className="flex items-center justify-center">
+                  <FaHeart className="text-rose/90" />
                 </div>
-                <p className="mt-2 text-lg font-medium text-cream">
+                <p className="mt-3 text-center text-lg font-medium text-cream">
                   {moment.caption}
                 </p>
               </div>
@@ -99,14 +96,12 @@ export const PhotoGallery = () => {
               </button>
               <img
                 src={galleryMoments[lightbox.index].src}
-                alt={galleryMoments[lightbox.index].title}
+                alt={galleryMoments[lightbox.index].caption}
                 className="max-h-[60vh] w-full rounded-[2rem] object-contain"
               />
               <div className="mt-4 text-center text-cream">
-                <h3 className="font-script text-3xl text-gold">
-                  {galleryMoments[lightbox.index].title}
-                </h3>
-                <p className="mt-2 text-cream/80 text-lg">
+                <FaHeart className="mx-auto text-rose/80" />
+                <p className="mt-3 text-cream/85 text-lg">
                   {galleryMoments[lightbox.index].caption}
                 </p>
                 <div className="mt-4 flex items-center justify-center gap-4 text-sm uppercase tracking-[0.3em] text-rose/80">

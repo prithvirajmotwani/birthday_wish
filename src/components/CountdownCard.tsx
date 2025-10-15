@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Countdown, { zeroPad } from 'react-countdown'
 import { motion } from 'framer-motion'
 import { FaHeart } from 'react-icons/fa'
 import { GiBalloons } from 'react-icons/gi'
+import { MagicReveal } from './MagicReveal'
 
 type CountdownCardProps = {
   targetDate: Date
@@ -10,7 +11,7 @@ type CountdownCardProps = {
   isActive: boolean
 }
 
-const FloatingIcon = ({ index }: { index: number }) => {
+const FloatingIcon = ({ index, isDimmed }: { index: number; isDimmed: boolean }) => {
   const delay = useMemo(() => Math.random() * 4, [])
   const initialX = useMemo(() => (Math.random() - 0.5) * 180, [])
   const initialY = useMemo(() => Math.random() * 80, [])
@@ -25,15 +26,19 @@ const FloatingIcon = ({ index }: { index: number }) => {
         fontSize: `${1.4 + Math.random()}rem`,
       }}
       initial={{ opacity: 0, y: 40 }}
-      animate={{
-        opacity: [0, 1, 0],
-        y: [-30, -80 - Math.random() * 40],
-        x: [0, (Math.random() - 0.5) * 40],
-      }}
+      animate={
+        isDimmed
+          ? { opacity: 0 }
+          : {
+              opacity: [0, 1, 0],
+              y: [-30, -80 - Math.random() * 40],
+              x: [0, (Math.random() - 0.5) * 40],
+            }
+      }
       transition={{
         duration: 8 + Math.random() * 4,
         delay,
-        repeat: Infinity,
+        repeat: isDimmed ? 0 : Infinity,
         ease: 'easeInOut',
       }}
     >
@@ -43,6 +48,42 @@ const FloatingIcon = ({ index }: { index: number }) => {
 }
 
 export const CountdownCard = ({ targetDate, onComplete, isActive }: CountdownCardProps) => {
+  const [revealStarted, setRevealStarted] = useState(false)
+  const revealTimeoutRef = useRef<number | null>(null)
+
+  const handleCountdownFinish = useCallback(() => {
+    setRevealStarted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!revealStarted) return
+
+    if (typeof window === 'undefined') {
+      onComplete()
+      return
+    }
+
+    revealTimeoutRef.current = window.setTimeout(() => {
+      onComplete()
+    }, 2400)
+
+    return () => {
+      if (revealTimeoutRef.current) {
+        window.clearTimeout(revealTimeoutRef.current)
+        revealTimeoutRef.current = null
+      }
+    }
+  }, [revealStarted, onComplete])
+
+  useEffect(() => {
+    return () => {
+      if (revealTimeoutRef.current) {
+        window.clearTimeout(revealTimeoutRef.current)
+        revealTimeoutRef.current = null
+      }
+    }
+  }, [])
+
   return (
     <motion.section
       className="relative mx-auto flex min-h-[26rem] w-full max-w-3xl flex-col items-center justify-center overflow-hidden rounded-[2.5rem] border border-emerald-700/40 bg-card-gradient/40 p-8 text-center shadow-aurora backdrop-blur-xl sm:min-h-[30rem] sm:p-10"
@@ -51,13 +92,13 @@ export const CountdownCard = ({ targetDate, onComplete, isActive }: CountdownCar
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       {[...Array(18).keys()].map((i) => (
-        <FloatingIcon key={i} index={i} />
+        <FloatingIcon key={i} index={i} isDimmed={revealStarted} />
       ))}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-emerald-900/30 mix-blend-soft-light" />
       <motion.div
         className="relative z-10"
         initial={{ y: 18, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={{ y: revealStarted ? -10 : 0, opacity: revealStarted ? 0 : 1 }}
         transition={{ delay: 0.2, duration: 0.7, ease: 'easeOut' }}
       >
         <p className="text-sm uppercase tracking-[0.4em] text-gold/70">Counting down to the most beautiful day 💚</p>
@@ -90,7 +131,7 @@ export const CountdownCard = ({ targetDate, onComplete, isActive }: CountdownCar
           <Countdown
             key={targetDate.toISOString()}
             date={targetDate}
-            onComplete={onComplete}
+            onComplete={handleCountdownFinish}
             renderer={({ days, hours, minutes, seconds }) => (
               <div className="flex flex-wrap items-center justify-center gap-4 text-cream sm:gap-5">
                 {[
@@ -121,6 +162,7 @@ export const CountdownCard = ({ targetDate, onComplete, isActive }: CountdownCar
           />
         </motion.div>
       </motion.div>
+      <MagicReveal isVisible={revealStarted} />
     </motion.section>
   )
 }

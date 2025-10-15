@@ -6,98 +6,89 @@ import { CountdownCard } from './components/CountdownCard'
 import { BirthdayWishCard } from './components/BirthdayWishCard'
 import { LoveLetterCards } from './components/LoveLetterCards'
 import { PhotoGallery } from './components/PhotoGallery'
-import { ReasonsCarousel } from './components/ReasonsCarousel'
-import { FutureSection } from './components/FutureSection'
-import { GameSection } from './components/GameSection'
+import { VideoSection } from './components/VideoSection'
 import { FinalMessage } from './components/FinalMessage'
 import { ParticlesBackground } from './components/ParticlesBackground'
 import { CursorSparkles } from './components/CursorSparkles'
 import { StageProgress } from './components/StageProgress'
 import { useWindowSize } from './hooks/useWindowSize'
-import { useRomanticSoundscape } from './hooks/useRomanticSoundscape'
-import { playCelebrationChime } from './utils/sounds'
 import type { Stage } from './types'
 
-const stageOrder: Stage[] = ['countdown', 'wish', 'letters', 'gallery', 'carousel', 'future', 'game', 'final']
+const stageOrder: Stage[] = ['countdown', 'wish', 'letters', 'gallery', 'video', 'final']
 
 const App = () => {
   const { width, height } = useWindowSize()
-  const { start: startSoundscape, stop: stopSoundscape } = useRomanticSoundscape()
   const [stage, setStage] = useState<Stage>('countdown')
   const [showConfetti, setShowConfetti] = useState(false)
-  const [musicStarted, setMusicStarted] = useState(false)
-  const [secretRevealed, setSecretRevealed] = useState(false)
   const isCountdownStage = stage === 'countdown'
 
   const targetDate = useMemo(() => {
   const now = new Date()
-  const targetMonth = 9 // October (zero-indexed)
-  const targetDay = 16
+  // const targetMonth = 9 // October (zero-indexed)
+  // const targetDay = 16
 
   // Previous countdown presets retained for reference:
   // const twentyFourHours = 24 * 60 * 60 * 1000
   // return new Date(now.getTime() + twentyFourHours)
 
-  // const eighteenSeconds = 18 * 1000
-  // return new Date(now.getTime() + eighteenSeconds)
+    const eighteenSeconds = 4   * 1000
+    return new Date(now.getTime() + eighteenSeconds)
 
-    const parseOffsetMinutes = (label?: string | null) => {
-      if (!label) return null
-      const explicitMatch = label.match(/([+-]\d{1,2})(?::(\d{2}))?/)
-      if (explicitMatch) {
-        const sign = explicitMatch[1].startsWith('-') ? -1 : 1
-        const hours = Math.abs(parseInt(explicitMatch[1], 10))
-        const minutes = explicitMatch[2] ? parseInt(explicitMatch[2], 10) : 0
-        return sign * (hours * 60 + minutes)
-      }
+    // const parseOffsetMinutes = (label?: string | null) => {
+    //   if (!label) return null
+    //   const explicitMatch = label.match(/([+-]\d{1,2})(?::(\d{2}))?/)
+    //   if (explicitMatch) {
+    //     const sign = explicitMatch[1].startsWith('-') ? -1 : 1
+    //     const hours = Math.abs(parseInt(explicitMatch[1], 10))
+    //     const minutes = explicitMatch[2] ? parseInt(explicitMatch[2], 10) : 0
+    //     return sign * (hours * 60 + minutes)
+    //   }
 
-      const normalized = label.toUpperCase()
-      if (normalized === 'BST') return 60
-      if (normalized === 'GMT' || normalized === 'UTC') return 0
+    //   const normalized = label.toUpperCase()
+    //   if (normalized === 'BST') return 60
+    //   if (normalized === 'GMT' || normalized === 'UTC') return 0
 
-      return null
-    }
+    //   return null
+    // }
 
-    const getLondonOffsetMinutes = (year: number) => {
-      const baseUtc = new Date(Date.UTC(year, targetMonth, targetDay, 0, 0, 0))
-      const formatterOptions = ['shortOffset', 'longOffset', 'short', 'long'] as const
+    // const getLondonOffsetMinutes = (year: number) => {
+    //   const baseUtc = new Date(Date.UTC(year, targetMonth, targetDay, 0, 0, 0))
+    //   const formatterOptions = ['shortOffset', 'longOffset', 'short', 'long'] as const
 
-      for (const option of formatterOptions) {
-        try {
-          const formatter = new Intl.DateTimeFormat('en-US', {
-            timeZone: 'Europe/London',
-            timeZoneName: option,
-          })
-          const label = formatter.formatToParts(baseUtc).find((part) => part.type === 'timeZoneName')?.value
-          const offsetMinutes = parseOffsetMinutes(label)
-          if (offsetMinutes !== null) {
-            return offsetMinutes
-          }
-        } catch {
-          // Some environments might not support every timeZoneName option; try the next one.
-          continue
-        }
-      }
+    //   for (const option of formatterOptions) {
+    //     try {
+    //       const formatter = new Intl.DateTimeFormat('en-US', {
+    //         timeZone: 'Europe/London',
+    //         timeZoneName: option,
+    //       })
+    //       const label = formatter.formatToParts(baseUtc).find((part) => part.type === 'timeZoneName')?.value
+    //       const offsetMinutes = parseOffsetMinutes(label)
+    //       if (offsetMinutes !== null) {
+    //         return offsetMinutes
+    //       }
+    //     } catch {
+    //       // Some environments might not support every timeZoneName option; try the next one.
+    //       continue
+    //     }
+    //   }
 
-      // Fallback: London is either GMT or GMT+1 depending on daylight savings. Mid-October falls under BST (GMT+1).
-      return 60
-    }
+    //   // Fallback: London is either GMT or GMT+1 depending on daylight savings. Mid-October falls under BST (GMT+1).
+    //   return 60
+    // }
 
-    const createTarget = (year: number) => {
-      const londonOffsetMinutes = getLondonOffsetMinutes(year)
-      const utcMillis = Date.UTC(year, targetMonth, targetDay, 0, 0, 0) - londonOffsetMinutes * 60 * 1000
-      return new Date(utcMillis)
-    }
+    // const createTarget = (year: number) => {
+    //   const londonOffsetMinutes = getLondonOffsetMinutes(year)
+    //   const utcMillis = Date.UTC(year, targetMonth, targetDay, 0, 0, 0) - londonOffsetMinutes * 60 * 1000
+    //   return new Date(utcMillis)
+    // }
 
-    const currentYear = now.getFullYear()
-    const candidateForThisYear = createTarget(currentYear)
+    // const currentYear = now.getFullYear()
+    // const candidateForThisYear = createTarget(currentYear)
 
-    return candidateForThisYear.getTime() >= now.getTime()
-      ? candidateForThisYear
-      : createTarget(currentYear + 1)
+    // return candidateForThisYear.getTime() >= now.getTime()
+    //   ? candidateForThisYear
+    //   : createTarget(currentYear + 1)
   }, [])
-
-  useEffect(() => () => stopSoundscape(), [stopSoundscape])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -110,8 +101,7 @@ const App = () => {
   }, [])
 
   const handleCountdownComplete = useCallback(() => {
-    setShowConfetti(true)
-    playCelebrationChime()
+  setShowConfetti(true)
     goToStage('wish')
     confetti({
       particleCount: 160,
@@ -128,16 +118,6 @@ const App = () => {
     setStage(stageOrder[nextIndex])
   }, [stage])
 
-  const handleMusicStart = useCallback(async () => {
-    if (musicStarted) return
-    await startSoundscape()
-    setMusicStarted(true)
-  }, [musicStarted, startSoundscape])
-
-  const handleSecretReveal = useCallback(() => {
-    setSecretRevealed(true)
-  }, [])
-
   const renderStage = () => {
     switch (stage) {
       case 'countdown':
@@ -151,8 +131,6 @@ const App = () => {
             onProceed={() => {
               goToNextStage()
             }}
-            onPlayMusic={handleMusicStart}
-            musicHasStarted={musicStarted}
           />
         )
       case 'letters':
@@ -167,28 +145,14 @@ const App = () => {
             <PhotoGallery />
           </SectionShell>
         )
-      case 'carousel':
-        return (
-          <SectionShell onContinue={goToNextStage} cta="Dream ahead">
-            <ReasonsCarousel />
-          </SectionShell>
-        )
-      case 'future':
-        return (
-          <SectionShell onContinue={goToNextStage} cta="Play with me">
-            <FutureSection />
-          </SectionShell>
-        )
-      case 'game':
+      case 'video':
         return (
           <SectionShell onContinue={goToNextStage} cta="Final love note">
-            <GameSection />
+            <VideoSection />
           </SectionShell>
         )
       case 'final':
-        return (
-          <FinalMessage onRevealSecret={handleSecretReveal} secretRevealed={secretRevealed} />
-        )
+        return <FinalMessage />
       default:
         return null
     }
@@ -208,9 +172,8 @@ const App = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              <p className="text-sm uppercase tracking-[0.45em] text-gold/70">A love story in eight enchanted beats</p>
-              <h1 className="mt-4 text-5xl text-cream drop-shadow-lg md:text-6xl">
-                A Birthday Symphony for My Fiancée
+              <h1 className="text-5xl text-cream drop-shadow-lg md:text-6xl">
+                A Birthday Symphony for My Love 
               </h1>
               <p className="mt-4 max-w-3xl mx-auto text-base text-cream/80">
                 Crafted with petals, pixels, and all the ways you keep my heart dancing.

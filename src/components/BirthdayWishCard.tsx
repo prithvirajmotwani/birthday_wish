@@ -1,18 +1,14 @@
 import { motion } from 'framer-motion'
-import { FaRegEnvelopeOpen, FaMusic } from 'react-icons/fa'
+import { FaRegEnvelopeOpen } from 'react-icons/fa'
 
 type BirthdayWishCardProps = {
   isVisible: boolean
   onProceed: () => void
-  onPlayMusic: () => void
-  musicHasStarted: boolean
 }
 
 export const BirthdayWishCard = ({
   isVisible,
   onProceed,
-  onPlayMusic,
-  musicHasStarted,
 }: BirthdayWishCardProps) => {
   return (
     <motion.section
@@ -33,26 +29,18 @@ export const BirthdayWishCard = ({
           animate={{ scale: [1, 1.02, 1] }}
           transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
         >
-          Happy Birthday, my love 🌸
+          Happy Birthday, Manji Raniii 🌸
         </motion.h1>
         <p className="mt-6 text-lg leading-relaxed text-cream/90">
           You are the heartbeat in my every song and the smile in every sunrise.
         </p>
-        <div className="mt-10 flex flex-col items-center gap-4 md:flex-row md:justify-center">
+        <div className="mt-10 flex flex-col items-center">
           <button
             onClick={onProceed}
             className="group inline-flex items-center gap-3 rounded-full border border-rose/50 bg-rose/20 px-8 py-3 text-base font-semibold text-cream shadow-glow transition hover:border-rose/70 hover:bg-rose/30"
           >
             <FaRegEnvelopeOpen className="text-lg transition group-hover:scale-110" />
             Open My Surprise 💌
-          </button>
-          <button
-            onClick={onPlayMusic}
-            disabled={musicHasStarted}
-            className="inline-flex items-center gap-3 rounded-full border border-gold/50 bg-gold/10 px-6 py-3 text-sm font-semibold text-gold transition hover:border-gold/70 hover:bg-gold/20 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            <FaMusic className="text-base" />
-            {musicHasStarted ? 'Music playing' : 'Play our song'}
           </button>
         </div>
       </motion.div>
