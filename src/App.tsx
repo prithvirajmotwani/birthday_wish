@@ -18,21 +18,11 @@ const stageOrder: Stage[] = ['countdown', 'wish', 'letters', 'gallery', 'video',
 
 const App = () => {
   const { width, height } = useWindowSize()
-  const [stage, setStage] = useState<Stage>('countdown')
-  const [showConfetti, setShowConfetti] = useState(false)
-  const isCountdownStage = stage === 'countdown'
 
-  const targetDate = useMemo(() => {
-  const now = new Date()
-  const targetMonth = 9 // October (zero-indexed)
-  const targetDay = 16
-
-  // Previous countdown presets retained for reference:
-  // const twentyFourHours = 24 * 60 * 60 * 1000
-  // return new Date(now.getTime() + twentyFourHours)
-
-    // const eighteenSeconds = 4   * 1000
-    // return new Date(now.getTime() + eighteenSeconds)
+  const { targetDate, countdownInitiallyComplete } = useMemo(() => {
+    const now = new Date()
+    const targetMonth = 9 // October (zero-indexed)
+    const targetDay = 16
 
     const parseOffsetMinutes = (label?: string | null) => {
       if (!label) return null
@@ -67,12 +57,10 @@ const App = () => {
             return offsetMinutes
           }
         } catch {
-          // Some environments might not support every timeZoneName option; try the next one.
           continue
         }
       }
 
-      // Fallback: London is either GMT or GMT+1 depending on daylight savings. Mid-October falls under BST (GMT+1).
       return 60
     }
 
@@ -83,12 +71,19 @@ const App = () => {
     }
 
     const currentYear = now.getFullYear()
-    const candidateForThisYear = createTarget(currentYear)
+    const eventDate = createTarget(currentYear)
+    const countdownDone = eventDate.getTime() <= now.getTime()
 
-    return candidateForThisYear.getTime() >= now.getTime()
-      ? candidateForThisYear
-      : createTarget(currentYear + 1)
+    return {
+      targetDate: eventDate,
+      countdownInitiallyComplete: countdownDone,
+    }
   }, [])
+
+  const [stage, setStage] = useState<Stage>(countdownInitiallyComplete ? 'wish' : 'countdown')
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [countdownComplete, setCountdownComplete] = useState(countdownInitiallyComplete)
+  const isCountdownStage = stage === 'countdown'
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -101,7 +96,12 @@ const App = () => {
   }, [])
 
   const handleCountdownComplete = useCallback(() => {
-  setShowConfetti(true)
+    if (countdownComplete) {
+      return
+    }
+
+    setCountdownComplete(true)
+    setShowConfetti(true)
     goToStage('wish')
     confetti({
       particleCount: 160,
@@ -110,13 +110,19 @@ const App = () => {
       colors: ['#ff6f91', '#f5e6cc', '#b8860b', '#014034'],
     })
     setTimeout(() => setShowConfetti(false), 6000)
-  }, [goToStage])
+  }, [countdownComplete, goToStage])
 
   const goToNextStage = useCallback(() => {
     const currentIndex = stageOrder.indexOf(stage)
     const nextIndex = Math.min(currentIndex + 1, stageOrder.length - 1)
     setStage(stageOrder[nextIndex])
   }, [stage])
+
+  useEffect(() => {
+    if (countdownComplete && stage === 'countdown') {
+      setStage('wish')
+    }
+  }, [countdownComplete, stage])
 
   const renderStage = () => {
     switch (stage) {
